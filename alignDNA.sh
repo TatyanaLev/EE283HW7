@@ -21,10 +21,15 @@ path="/data/class/ecoevo283/tzhuravl/RAWDATA/DNAseq/"
 
 cd $path
 
-ls *_1.fq.gz | sed 's/_1.fq.gz//' > prefixes.txt
-file="prefixes.txt"
-prefix=`head -n $SLURM_ARRAY_TASK_ID ${file} | tail -n 1`
+###DO BEFORE RUNNING SCRIPT
+#ls *_1.fq.gz | sed 's/_1.fq.gz//' > DNAprefixes.txt
 
+file="DNAprefixes.txt"
+
+prefix=`head -n $SLURM_ARRAY_TASK_ID ${file} | tail -n 1`
+sampleID=`echo $prefix | cut -d "_" -f 1`
+
+echo $sampleID
 
 # alignments
 
@@ -32,7 +37,7 @@ bwa mem -t 2 -M $ref ${prefix}_1.fq.gz ${prefix}_2.fq.gz | samtools view -bS - >
 
 samtools sort ${prefix}.bam -o ${prefix}.sort.bam
 
-java -jar /opt/apps/picard-tools/1.87/AddOrReplaceReadGroups.jar I=${prefix}.sort.bam O=${prefix}.RG.bam SORT_ORDER=coordinate RGPL=illumina RGPU=D109LACXX RGLB=Lib1 RGID=${prefix} RGSM=${prefix} VALIDATION_STRINGENCY=LENIENT
+java -jar /opt/apps/picard-tools/1.87/AddOrReplaceReadGroups.jar I=${prefix}.sort.bam O=${prefix}.RG.bam SORT_ORDER=coordinate RGPL=illumina RGPU=D109LACXX RGLB=Lib1 RGID=${sampleID} RGSM=${sampleID} VALIDATION_STRINGENCY=LENIENT
 
 samtools index ${prefix}.RG.bam
 
