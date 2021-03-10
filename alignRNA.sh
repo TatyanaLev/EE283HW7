@@ -21,6 +21,9 @@ module load gatk
 #take first 10 and last 10 samples (20 files F & R)
 #ls *_[F].fq.gz | head -10 | sed 's/_F.fq.gz//' > RNAprefixes.txt
 #ls *_[F].fq.gz | tail -10 | sed 's/_F.fq.gz//' >> RNAprefixes.txt
+## OR ##
+#Rscript ./subsetRNA.R
+#cat shortRNAseq.names.txt | sed 's/RNAseq\/bam\///' | sed s'/.bam//' > RNAprefixes.txt 
 #mkdir alignments #inside RAWDATA/RNAseq
 
 ref="/data/class/ecoevo283/tzhuravl/RAWDATA/ref/dmel-all-chromosome-r6.13.fasta"
